@@ -171,23 +171,26 @@ var lonelyFollowers = function (){
 console.log("List of those who follow some who don't follow back: ")
 console.log(lonelyFollowers())
 // List everyone and their reach (sum of # of followers and # of followers of followers)
+
 var reach = function (){
+  var listReach = {}
   for (var key in data){
     var howManyFollowers = listFollowedBy(key)
-    console.log("I am " + data[key].name + " and I have " + howManyFollowers.length + " followers")
-    console.log("My followers have " + followersOfFollowers(key) + " followers")
-    console.log("My reach is " + (Number(howManyFollowers.length) + Number(followersOfFollowers(key))))
+    var name = data[key].name
+    listReach[name] = (Number(howManyFollowers.length) + Number(followersOfFollowers(key)))
   }
+  return listReach
 }
 var followersOfFollowers = function(usr){
   var followersOf = 0
-  followersOfFollowrs = listFollowedBy(usr).length
   for (var key in data){
+    var followers = listFollowedBy(key).length
     for(i = 0; i < data[key].follows.length; i++)
       if (data[key].follows[i] === usr){
-        followersOf += followersOfFollowrs
+        followersOf += followers
       }
   }
   return followersOf
 }
-reach()
+console.log("Here is a list of everyone's reach:")
+console.log(reach())
